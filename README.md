@@ -1,5 +1,5 @@
 # CSCI351 Project 1: Communication and Leader Election
-### Group: Andrew Passero, Warren Wang
+### Group: Joseph Carluccio, Yang Hong, Andrew Passero, Warren Wang
 
 ## File List
 
