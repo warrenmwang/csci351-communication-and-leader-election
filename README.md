@@ -5,5 +5,6 @@
 
 ## Instructions
 
-For each problem run something like:
-`mpiexec -n 3 python problem1.py`
+For each problem please run the `run.sh` file to run our tests against our programs:
+Example for problem 1:
+```./problem1/run.sh```
