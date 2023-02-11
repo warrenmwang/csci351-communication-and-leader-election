@@ -1,32 +1,34 @@
-# broadcast from and convergecast to the root of a tree
+# broadcast from the root of a tree
 # assume graph is a rooted tree
-
-# mpiexec -n 11 python problem1.py
-# w/ graphs.txt with 11 nodes [0, 10]
 from mpi4py import MPI
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--test", help="test file (graph in adjacency list form)")
+args = parser.parse_args()
+testfile = args.test
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 
-with open("../tests/graphs.txt", "r") as f:
+with open(testfile, "r") as f:
     lines = f.readlines()
     tmp = lines[rank]
     tmp = tmp.split(":")
     tmp = tmp[1]
     tmp = tmp.split(",")
     neighbors = [int(x.strip()) for x in tmp]
-    #print(f'rank {rank} has neighbors: {neighbors}')
-
 
 # BROADCAST
 # gonna use nonblocking send
-if rank == 0:
+# you are root if your rank is in your neighbors list
+if rank in neighbors:
     # root
     sendData = f"Hi from process {rank}"
     for i in neighbors:
-        sendRequest = comm.isend(sendData, dest=i)
-        #sendRequest.wait() 
-    print(f"process {rank} terminating")
+        if rank != i:
+            comm.isend(sendData, dest=i)
+    # print(f"process {rank} terminating")
 else:
     # non-root
     recvRequest = comm.irecv()
@@ -37,8 +39,6 @@ else:
     print(f"process {rank} received a msg: {recvData[1]}")
     sendData = f"Hi from process {rank}"
     for i in neighbors:
-        sendRequest = comm.isend(sendData, dest=i)
-        #sendRequest.wait()
-    print(f"process {rank} terminating")
+        comm.isend(sendData, dest=i)
+    # print(f"process {rank} terminating")
 
-# CONVERGECAST
