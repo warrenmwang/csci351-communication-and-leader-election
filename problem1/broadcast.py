@@ -24,11 +24,10 @@ with open(testfile, "r") as f:
 # you are root if your rank is in your neighbors list
 if rank in neighbors:
     # root
-    sendData = f"Hi from process {rank}"
+    sendData = f"Root process {rank} sending broadcast."
     for i in neighbors:
         if rank != i:
             comm.isend(sendData, dest=i)
-    # print(f"process {rank} terminating")
 else:
     # non-root
     recvRequest = comm.irecv()
@@ -36,9 +35,7 @@ else:
         recvData = recvRequest.test()
         if recvData[0]:
             break
-    print(f"process {rank} received a msg: {recvData[1]}")
-    sendData = f"Hi from process {rank}"
+    print(f"process {rank} received: {recvData[1]}")
     for i in neighbors:
-        comm.isend(sendData, dest=i)
-    # print(f"process {rank} terminating")
+        comm.isend(recvData[1], dest=i)
 
