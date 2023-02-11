@@ -7,4 +7,6 @@
 
 For each problem please run the `run.sh` file to run our tests against our programs:
 Example for problem 1:
-```./problem1/run.sh```
+```
+cd problem1 && ./run.sh && ..
+```
