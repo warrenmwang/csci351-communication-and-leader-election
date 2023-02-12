@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "Problem 4:"
 echo "" && echo "AdaptedConvergecast tests:"
 echo "" && echo "Using function max:"
 mpiexec -n 15 python adapted_convergecast.py --test ../tests/rooted_tree0.txt --func max
@@ -17,3 +18,4 @@ mpiexec -n 11 python adapted_convergecast.py --test ../tests/rooted_tree1.txt --
 
 echo "" && echo "Using invalid functions:"
 mpiexec -n 15 python adapted_convergecast.py --test ../tests/rooted_tree0.txt --func print
+echo "" 
