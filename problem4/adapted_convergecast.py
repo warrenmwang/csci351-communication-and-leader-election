@@ -15,7 +15,7 @@ function = eval(args.func)
 try:
    x = function([3,4,5])
    if (x == None):
-     print("invalid function")
+     #print("invalid function")
      exit();
 except:
    print("invalid function")
