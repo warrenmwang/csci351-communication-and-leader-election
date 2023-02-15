@@ -24,9 +24,14 @@ comm.isend(sendData, dest = leftNeighbor)
 #receiving
 while True:
         recvRequest = comm.irecv()
-        if recvRequest != rank and recvRequest > rank:
+        recvData = recvRequest
+        #if x is not i and x > i
+        if recvData != rank and recvData > rank:
             #send recvRequest to left neighbor
+            sendData = recvRequest
+            comm.isend(sendData, dest = leftNeighbor)
+        #if x = i
+         Leader = 
             
 
-#bidirectional algorithm
 
