@@ -4,6 +4,8 @@
 from mpi4py import MPI
 import argparse
 import sys
+sys.path.insert(1, "..")
+from utils import read_graph, is_leaf
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--test", help="test file (graph in adjacency list form)")
@@ -24,26 +26,15 @@ except:
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 
-with open(testfile, "r") as f:
-    lines = f.readlines()
-    tmp = lines[rank]
-    tmp = tmp.split(":")
-    tmp = tmp[1]
-    tmp = tmp.split(",")
-    neighbors = [int(x.strip()) for x in tmp]
-
-def is_leaf(neighbors):
-    if len(neighbors) == 1 and neighbors[0] != rank:
-        return True
-    else:
-        return False
+# get neighbors from rooted tree
+neighbors = read_graph(testfile, rank)
 
 # CONVERGECAST
 # parent is first id in neighbors
 # you are root if first id is your id
 
 # leaf
-if is_leaf(neighbors):
+if is_leaf(neighbors, rank):
     # print(f"process {rank} is a leaf")
     # send M_i to parent
     sendData = rank

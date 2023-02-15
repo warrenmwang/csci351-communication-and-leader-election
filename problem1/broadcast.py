@@ -2,6 +2,9 @@
 # assume graph is a rooted tree
 from mpi4py import MPI
 import argparse
+import sys
+sys.path.insert(1, "..")
+from utils import read_graph
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--test", help="test file (graph in adjacency list form)")
@@ -11,13 +14,8 @@ testfile = args.test
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 
-with open(testfile, "r") as f:
-    lines = f.readlines()
-    tmp = lines[rank]
-    tmp = tmp.split(":")
-    tmp = tmp[1]
-    tmp = tmp.split(",")
-    neighbors = [int(x.strip()) for x in tmp]
+# get neighbors
+neighbors = read_graph(testfile, rank)
 
 # BROADCAST
 # gonna use nonblocking send
