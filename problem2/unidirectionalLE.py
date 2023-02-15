@@ -40,7 +40,7 @@ while True:
     ##ID received is index 1 of recvData and index 0 of the tuple
     recvID = recvData[1][0]
     terminateNonLeader = recvData[1][1]
-    print(f"process {rank} received id: {recvID}")
+    # print(f"process {rank} received id: {recvID}")
     
     if terminateNonLeader: 
         #if terminateNonLeader is true pass message on and terminate 
@@ -51,12 +51,12 @@ while True:
         #If receiving ID != rank 
         if recvID > rank: 
             #Pass received ID to left process if it is greater than own ID 
-            print(f"{rank} Passing {recvID} to {neighbors[0]}")
+            # print(f"{rank} Passing {recvID} to {neighbors[0]}")
             comm.isend((recvID,False), dest = neighbors[0])
     elif recvID == rank: 
         #If recvID == rank, this process is leader, send message to left node with terminateAsNonleader = true, and terminate
         leader = True
-        print(f"{rank} has terminated as LEADER")
+        print(f"process {rank} has terminated as LEADER")
         comm.isend((rank,True), dest = neighbors[0])
         sys.exit() 
     
