@@ -36,7 +36,6 @@ else:
     probe = True
     reply = False
     alreadyRecieved = False
-    terminateNonLeader = False
     leader = False
     terminateNonLeader = False
     numMessages = 0
