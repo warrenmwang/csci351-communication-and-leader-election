@@ -16,12 +16,15 @@ rank = comm.Get_rank()
 
 rnd = 0
 dist = 1
+probe = True
+reply = False
+alreadyRecieved = False
 
 leader = False
 
 terminateNonLeader = False
-comm.isend((rank, rnd, dist), dest = neighbors[0])
-comm.isend((rank, rnd, dist), dest = neighbors[1])
+comm.isend((rank, rnd, dist, probe, reply), dest = neighbors[0])
+comm.isend((rank, rnd, dist, probe, reply), dest = neighbors[1])
 
 
 while True: 
@@ -35,34 +38,44 @@ while True:
     recvID = recvData[1][0]
     rndNum = recvData[1][1]
     distance = recvData[1][2]
-    
-    #if process recieves its own id, elect itself as leader
-    if recvID == rank: 
-        leader = True
-        print(f"process {rank} has terminated as LEADER")
-        sys.exit() 
+    probe = recvData[1][3]
+    reply = recvData[1][4]
 
-    if recvID > rank and distance < pow(2, rndNum):
-        #send probe, j, r, d + 1 to right/left (resp.)
-        comm.isend((probe, recvID, rndNum, distance+1), dest = neighbors[0])
-        comm.isend((probe, recvID, rndNum, distance+1), dest = neighbors[1])
+    #upon receiving probe, j, r, d from left/right
+    if probe == True:
 
-    if recvID > rank and distance >= pow(2, rndNum):
-        #send reply, j, r, to left/right (resp.)
-        comm.isend((reply, recvID, rndNum), dest = neighbors[0])
-        comm.isend((reply, recvID, rndNum), dest = neighbors[1])
+        #if process recieves its own id, elect itself as leader
+        if recvID == rank: 
+            leader = True
+            print(f"process {rank} has terminated as LEADER")
+            sys.exit() 
+
+        if recvID > rank and distance < pow(2, rndNum):
+            #send probe, j, r, d + 1 to right/left (resp.)
+            comm.isend((recvID, rndNum, distance+1, True, False), dest = neighbors[0])
+            comm.isend((recvID, rndNum, distance+1, True, False), dest = neighbors[1])
+
+        if recvID > rank and distance >= pow(2, rndNum):
+            #send reply, j, r, to left/right (resp.)
+            comm.isend((recvID, rndNum, distance, False, True), dest = neighbors[0])
+            comm.isend((recvID, rndNum, distance, False, True), dest = neighbors[1])
+
 
     #On receiving reply, j, r from left/right
-    if recvID != rank:
-        #send reply,j,r to right/left (resp.)
-        comm.isend((reply, recvID, rndNum), dest = neighbors[0])
-        comm.isend((reply, recvID, rndNum), dest = neighbors[1])
+    if reply == True:
 
-    #already received reply, j, r from right/left (resp.)
-    elif:
-        #send probe, i, r + 1 to left and right
-        comm.isend((probe, rank, rndNum+1, 1), dest = neighbors[0])
-        comm.isend((probe, rank, rndNum+1, 1), dest = neighbors[1])
+        if recvID != rank:
+            #send reply,j,r to right/left (resp.)
+            comm.isend((recvID, rndNum, distance, False, True), dest = neighbors[0])
+            comm.isend((recvID, rndNum, distance, False, True), dest = neighbors[1])
+
+        #already received reply, j, r from right/left (resp.)
+        elif reply == True and alreadyRecieved == True:
+            #send probe, i, r + 1 to left and right
+            comm.isend((rank, rndNum+1, 1, True, False), dest = neighbors[0])
+            comm.isend((rank, rndNum+1, 1, True, False), dest = neighbors[1])
+
+        alreadyRecieved = True
 
 
 
