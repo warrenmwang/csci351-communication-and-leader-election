@@ -9,3 +9,6 @@ echo ""
 python3 RandomRings.py --size 10
 mpiexec -n 11 python unidirectionalLE.py --test ../tests/randomRing.txt
 
+echo "" 
+
+mpiexec -n 7 python bidirectionalLE.py --test ../tests/ringcopy.txt
