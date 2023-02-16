@@ -10,6 +10,7 @@ args = parser.parse_args()
 testfile = args.test
 
 comm = MPI.COMM_WORLD
+size = comm.Get_size()-1
 rank = comm.Get_rank()
 
 neighbors = read_graph(testfile,rank)
