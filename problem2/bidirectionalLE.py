@@ -36,7 +36,6 @@ else:
     probe = True
     reply = False
     alreadyRecieved = False
-    terminateNonLeader = False
     leader = False
     terminateNonLeader = False
     numMessages = 0
@@ -67,24 +66,23 @@ else:
                 #if terminateNonLeader is true pass message to both neigbhors and terminate
 
                 print(f"process {rank} terminated NONLEADER")
-                comm.isend((rank, rnd, dist, probe, reply, terminateNonLeader), dest = neighbors[0])
-                comm.isend((rank, rnd, dist, probe, reply, terminateNonLeader), dest = neighbors[1])
+                comm.isend((rank, rnd, dist, False, False, terminateNonLeader), dest = neighbors[0])
+                comm.isend((rank, rnd, dist, False, False, terminateNonLeader), dest = neighbors[1])
                 numMessages+=2
                 comm.isend(numMessages, dest = size)
                 sys.exit()
 
         #upon receiving probe, j, r, d from left/right
-        if probe:
+        if probe and reply == False:
 
             #if process recieves its own id, elect itself as leader
             if recvID == rank and leader == False:
                 leader = True
                 print(f"process {rank} has terminated as LEADER")
-                comm.isend(numMessages, dest = size)
-                comm.isend((rank, rnd, dist, probe, reply, True), dest = neighbors[0])
-                comm.isend((rank, rnd, dist, probe, reply, True), dest = neighbors[1])
-                comm.isend(numMessages, dest = size)
+                comm.isend((rank, rnd, dist, False, reply, True), dest = neighbors[0])
+                comm.isend((rank, rnd, dist, False, reply, True), dest = neighbors[1])
                 numMessages+=2
+                comm.isend(numMessages, dest = size)
                 sys.exit()
 
             if recvID > rank and distance < pow(2, rndNum):
