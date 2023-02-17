@@ -30,7 +30,10 @@ if rank == size:
         totalMessages += recvData[1]
         countMessagesRecieved += 1
         if countMessagesRecieved == size: 
-            print(f"Total number of messages is {totalMessages} ")
+            f = open("../tests/messageSizeResults.txt","w")
+            f.write(f"Total messages sent for a ring of size {size} is {totalMessages}")
+            print(f"Total messages sent for a ring of size {size} is {totalMessages}")
+            f.close() 
             sys.exit()
     
         

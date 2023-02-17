@@ -39,7 +39,6 @@ for i in range(len(orderedProcesses)-1,0,-1):
 firstNode = orderedProcesses[0]
 neighbors[firstNode].append(len(orderedProcesses)-1)
 
-print(neighbors)
 
 
 textString = ""
