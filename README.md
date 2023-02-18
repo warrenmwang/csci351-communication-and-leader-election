@@ -15,5 +15,5 @@ cd problem1 && ./run.sh && cd ..
 ```
 If you want to run all the `run.sh` commands at once:
 ```
-cd problem1 && ./run.sh && cd ../problem2 && ./run.sh && cd ../problem3 && ./run.sh && cd ../problem4 && ./run.sh && cd ..
+cd problem1 && ./run.sh && cd ../problem2 && ./run.sh && cd ../problem4 && ./run.sh && cd ..
 ```
