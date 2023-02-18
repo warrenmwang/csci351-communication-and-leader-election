@@ -17,3 +17,11 @@ If you want to run all the `run.sh` commands at once:
 ```
 cd problem1 && ./run.sh && cd ../problem2 && ./run.sh && cd ../problem3 && ./run.sh && cd ../problem4 && ./run.sh && cd ..
 ```
+
+Additionally for problem 2, issue the following command to run the message size simulation: 
+
+```
+cd problem2 && python3 simulateRings.py  
+```
+
+The results will be displayed in 'results.png' in the problem2 directory. 

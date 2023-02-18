@@ -1,0 +1,1 @@
+Total messages sent for a ring of size 90 is 484
